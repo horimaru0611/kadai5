@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<script src="js/jquery-2.1.3.min.js"></script>
+<link rel="stylesheet" href="css/yakyu.css">
+<title>野球</title>
+</head>
+<body>
+    
+    <img class="haikei" src="./img/yakyujo.jpeg" alt="">
+<div class="body">
+<header>
+    <h5>野球</h5>
+</header>
+
+<main>
+
+    <div class="label">
+    <div class="hantei">結果：<span id="kekka"></div><div class="run">ランナー：<span id="runner"></div>
+    </div>
+<div class ="taisen">
+    <img id = "toukyugo" class="pitcher" src="./img/motion.png" alt="">
+    <table border="1">
+        <tr>
+          <td id="1">　　　</td><td id="2">　　　</td><td id="3">　　　</td>
+        </tr>
+        <tr>
+          <td id="4">　　　</td><td id="5">　　　</td><td id="6">　　　</td>
+        </tr>
+        <tr>
+          <td id="7">　　　</td><td id="8">　　　</td><td id="9">　　　</td>
+        </tr>
+ </table>
+    <img id ="swinggo" class="batter" src="./img/utumae.png" alt="">
+</div>
+
+
+<div class="koumoku"><p class="cpu_tokyu">投球(cpu):<span id="toukyu"></p>
+ <div  class="swing"><p id="swing_button">スイング</p><p id="minogasi">見逃す</p></div>
+<p class="jibun_nerai">狙い球(あなた)：<span id="jibun"></p></div>
+    
+   
+
+    <div class="kousin">
+        <div class="tokuten">
+
+        <table border="1">
+            <tr>
+              <td class="inn">イニング</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td>
+            </tr>
+            <tr>
+              <td class="toku">得点</td><td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+     </table>
+    </div>
+    <div class="count">
+        <div class="BSObox"><div class="ball">&nbsp;B&nbsp;</div><div id="ballcount"></div></div>
+        <div class="BSObox"><div class="strike">&nbsp;S&nbsp;</div><div id="strikecount"></div></div>
+        <div class="BSObox"><div class="out">&nbsp;O&nbsp;</div><div id="outcount"></div></div>
+    </div>
+
+        <a id="reload_button">
+          <i class="fa" aria-hidden="ture"></i><span class="next">次の球</span>
+        </a>
+        
+
+        
+        <div class="daritu">
+            <table border="1">
+                <tr>
+                  <td>打率</td><td id="ritu"></td>
+                </tr>
+                <tr>
+                  <td>本塁打</td><td id="honn"></td>
+                </tr>
+         </table>
+         
+
+        </div>
+        <div class="re" id="reset">reset</div>
+    
+    </div>
+
+        <div id="hantei_a" class="hantei_1">
+            HOME RUN
+          </div>
+    </div>
+</main>
+
+<script>
+
+
+    let r = Math.random()*13; //小数点0.000001~0.99999
+    let n = Math.ceil(r); 
+
+ 
+
+let i_h,i_m,i_l,m_h,m_m,m_l,o_h,o_m,o_l,naiyou,cpu,a,b;
+let b_c = localStorage.getItem('key_b');
+let s_c = localStorage.getItem('key_s');
+let o_c = localStorage.getItem('key_o');
+
+let runner = [];
+ runner[0] = localStorage.getItem('run_1');
+ runner[1] = localStorage.getItem('run_2');
+ runner[2] = localStorage.getItem('run_3');
+
+let run_count=0;
+
+if(runner[0,1,2] == null){
+    localStorage.setItem('rui',"なし");
+    
+
+}else if(runner[0] != null && runner[1,2]==null){
+    localStorage.setItem('rui',"一塁");
+}else if(runner[1] != null && runner[0,2]==null){
+    localStorage.setItem('rui',"二塁");
+}else if(runner[2] != null && runner[0,1]==null){
+    localStorage.setItem('rui',"三塁");
+}else if(runner[0,1] != null && runner[2]==null){
+    localStorage.setItem('rui',"一二塁");
+}else if(runner[0,2] != null && runner[1]==null){
+    localStorage.setItem('rui',"一三塁");
+}else if(runner[1,2] != null && runner[0]==null){
+    localStorage.setItem('rui',"二三塁");
+}else if(runner[0,1,2] != null){
+    localStorage.setItem('rui',"満塁");
+}
+
+let da,h,hr,ritu_da_h,h_da;
+
+if(localStorage.getItem('ritu')== null){
+    localStorage.setItem('ritu','.---')
+}
+
+
+
+
+if(localStorage.getItem('da_lo')!= null){
+    da = Number(localStorage.getItem('da_lo'));
+}else{
+    da=0;
+}
+if(localStorage.getItem('h_lo')!= null){
+    da = Number(localStorage.getItem('h_lo'));
+}else{
+    h=0;
+}
+if(localStorage.getItem('hr_lo')!= null){
+    hr = Number(localStorage.getItem('hr_lo'));
+}else{
+    hr=0;
+    localStorage.setItem('hr_lo','0')
+}
+/*if(localStorage.getItem(key_b)=! 0){
+    b_c=localStorage.getItem(key_b)
+}:/
+
+let da=0,h=0,hr=0,ritu_da_h,h_da;
+
+var newText;
+
+da = localStorage.getItem("da_lo");
+h = localStorage.getItem("h_lo");
+hr = localStorage.getItem("hr_lo");
+ritu_da_h = localStorage.getItem("ritu_da_lo")
+*/
+
+var img = document.getElementById('toukyugo');
+var img_2 = document.getElementById('swinggo');
+
+
+/*if(da ===  null){
+    newText = ".---";
+    document.getElementById("ritu").textContent = newText;
+}else{
+    newText = ritu_da_h.toFixed(3);
+  document.getElementById("ritu").textContent = newText;
+}
+
+if(hr === null){
+var newText_2 = 0;
+ document.getElementById("honn").textContent = newText_2;
+}else{
+    var newText_2 = hr;
+ document.getElementById("honn").textContent = newText_2;
+}*/
+
+
+if(n==1){ //投球インハイ
+    i_h = 0; //インハイ
+    i_m = 1; //イン中
+    i_l = 2; //インロー
+    m_h = 1; //高め
+    m_m = 2; //真ん中
+    m_l = 3; //低め
+    o_h = 2; //アウトハイ
+    o_m = 3; //アウト中
+    o_l = 4; //アウトロー
+    cpu = "内角高め"
+}
+
+if(n==2){ //投球真ん中高め
+    i_h = 1;
+    i_m = 2;
+    i_l = 3;
+    m_h = 0;
+    m_m = 1;
+    m_l = 2;
+    o_h = 1;
+    o_m = 2;
+    o_l = 3;
+    cpu = "真ん中高め"
+}
+
+if(n==3){//アウトハイ
+    i_h = 2;
+    i_m = 3;
+    i_l = 4;
+    m_h = 1;
+    m_m = 2;
+    m_l = 3;
+    o_h = 0;
+    o_m = 1;
+    o_l = 2;
+    cpu = "外角高め"
+}
+
+if(n==4){//イン中
+    i_h = 1;
+    i_m = 0;
+    i_l = 1;
+    m_h = 2;
+    m_m = 1;
+    m_l = 2;
+    o_h = 3;
+    o_m = 2;
+    o_l = 3;
+    cpu = "内角真ん中"
+}
+
+if(n==5){//真ん中
+    i_h = 2;
+    i_m = 1;
+    i_l = 2;
+    m_h = 1;
+    m_m = 0;
+    m_l = 1;
+    o_h = 2;
+    o_m = 1;
+    o_l = 2;
+    cpu = "真ん中"
+}
+
+if(n==6){//アウト中
+    i_h = 3;
+    i_m = 2;
+    i_l = 3;
+    m_h = 2;
+    m_m = 1;
+    m_l = 2;
+    o_h = 1;
+    o_m = 0;
+    o_l = 1;
+    cpu = "外角真ん中"
+}
+
+if(n==7){//インロー
+    i_h = 2;
+    i_m = 1;
+    i_l = 0;
+    m_h = 3;
+    m_m = 2;
+    m_l = 1;
+    o_h = 4;
+    o_m = 3;
+    o_l = 2;
+    cpu = "内角低め"
+}
+
+if(n==8){//真ん中低め
+    i_h = 3;
+    i_m = 2;
+    i_l = 1;
+    m_h = 2;
+    m_m = 1;
+    m_l = 0;
+    o_h = 3;
+    o_m = 2;
+    o_l = 1;
+    cpu = "真ん中低め"
+}
+
+if(n==9){ //アウトロー
+    i_h = 4;
+    i_m = 3;
+    i_l = 2;
+    m_h = 3;
+    m_m = 2;
+    m_l = 1;
+    o_h = 2;
+    o_m = 1;
+    o_l = 0;
+    cpu = "外角低め"
+}
+
+if(n==10){ //高めボール球
+    i_h = 2;
+    i_m = 3;
+    i_l = 4;
+    m_h = 2;
+    m_m = 3;
+    m_l = 4;
+    o_h = 2;
+    o_m = 3;
+    o_l = 4;
+    cpu = "高めボール球"
+}
+
+if(n==11){ //低めボール球
+    i_h = 4;
+    i_m = 3;
+    i_l = 2;
+    m_h = 4;
+    m_m = 3;
+    m_l = 2;
+    o_h = 4;
+    o_m = 3;
+    o_l = 2;
+    cpu = "低めボール球"
+}
+
+if(n==12){ //内角ボール球
+    i_h = 2;
+    i_m = 2;
+    i_l = 2;
+    m_h = 3;
+    m_m = 3;
+    m_l = 3;
+    o_h = 4;
+    o_m = 4;
+    o_l = 4;
+    cpu = "内角ボール球"
+}
+
+if(n==13){ //外角ボール球
+    i_h = 4;
+    i_m = 4;
+    i_l = 4;
+    m_h = 3;
+    m_m = 3;
+    m_l = 3;
+    o_h = 2;
+    o_m = 2;
+    o_l = 2;
+    cpu = "外角ボール球"
+}
+$("#1").on("click",function(){
+    naiyou = i_h;
+    $("#jibun").html("内角高め");
+});
+$("#2").on("click",function(){
+    naiyou = m_h;
+    $("#jibun").html("真ん中高め");
+});
+$("#3").on("click",function(){
+    naiyou = o_h;
+    $("#jibun").html("外角高め");
+});
+$("#4").on("click",function(){
+    naiyou = i_m;
+    $("#jibun").html("内角");
+});
+$("#5").on("click",function(){
+    naiyou = m_m;
+    $("#jibun").html("真ん中");
+});
+$("#6").on("click",function(){
+    naiyou = o_m;
+    $("#jibun").html("外角");
+});
+$("#7").on("click",function(){
+    naiyou = i_l;
+    $("#jibun").html("内角低め");
+});
+$("#8").on("click",function(){
+    naiyou = m_l;
+    $("#jibun").html("真ん中低め");
+});
+$("#9").on("click",function(){
+    naiyou = o_l;
+    $("#jibun").html("外角低め");
+});
+
+$("#swing_button").on("click",function(){
+    a = Math.random()*2; //小数点0.000001~0.99999
+    b = Math.ceil(a); 
+    img.src = './img/nageru.png';
+    $("#toukyu").html(cpu);
+    
+    if(n==1){
+        $("#1").css("background","red"); 
+    }
+    if(n==2){
+        $("#2").css("background","red"); 
+    }
+    if(n==3){
+        $("#3").css("background","red"); 
+    }
+    if(n==4){
+        $("#4").css("background","red"); 
+    }
+    if(n==5){
+        $("#5").css("background","red"); 
+    }
+    if(n==6){
+        $("#6").css("background","red"); 
+    }
+    if(n==7){
+        $("#7").css("background","red"); 
+    }
+    if(n==8){
+        $("#8").css("background","red"); 
+    }
+    if(n==9){
+        $("#9").css("background","red"); 
+    }
+
+    if(naiyou==0){
+        $("#kekka").html("ホームラン！！！");
+        img_2.src = './img/homerun.png';
+        $("#hantei_a").fadeIn(5000);
+        $("#kekka").css("color","red"); 
+        localStorage.removeItem('key_b')
+            localStorage.removeItem('key_s')
+        hr = hr + 1;
+        h = h + 1;
+        da = da +1;
+    }
+    if(naiyou==1){
+        img_2.src = './img/hit_bonda.png';
+        localStorage.removeItem('key_b')
+            localStorage.removeItem('key_s')
+        if(b==1){
+            $("#kekka").html("ツーベースヒット！！");
+            $("#kekka").css("color","red"); 
+            
+            h = h + 1;
+            da = da +1;
+        }
+        if(b==2){
+            /*if(runner[0]==null){
+            localStorage.setItem('run_1','1')
+            }else if(runner[0]!=null){
+                if(runner[1]==null){
+                localStorage.setItem('run_1','1')
+            }else if(runner[2]==null){}
+        }
+        if(runner[0]==null){
+            localStorage.setItem('run_1','1')
+            }*/
+            $("#kekka").html("ヒット！");
+            $("#kekka").css("color","red"); 
+            h = h + 1;
+            da = da +1;
+
+        }
+    }
+    if(naiyou==2){
+        localStorage.removeItem('key_b')
+            localStorage.removeItem('key_s')
+        img_2.src = './img/hit_bonda.png';
+        da = da +1;
+        if(b==1){
+            if(runner==null){
+            localStorage.setItem('rui','一塁')
+            }
+            $("#kekka").html("ヒット！");
+            $("#kekka").css("color","green"); 
+            h = h + 1;
+             
+           
+            
+        }
+        if(b==2){
+            $("#kekka").html("アウト");
+            $("#kekka").css("color","black"); 
+            if(o_c==null){
+            localStorage.setItem('key_o','●')
+            }
+            if(o_c.length==1){
+             localStorage.setItem('key_o','●●')
+            }
+            if(o_c.length==2){
+                localStorage.removeItem('key_o')  
+            }
+        }
+    }
+    if(naiyou==3){
+        img_2.src = './img/karaburi.png';
+        if(s_c==null){
+        $("#kekka").html("空振り");
+        localStorage.setItem('key_s','●')
+        }
+        if(s_c.length==1){
+        $("#kekka").html("空振り");
+        localStorage.setItem('key_s','●●')
+        }
+        if(s_c.length==2){
+        $("#kekka").html("三振");
+        localStorage.removeItem('key_b')
+        localStorage.removeItem('key_s')
+        da = da +1;
+        if(o_c==null){
+            localStorage.setItem('key_o','●')
+            }
+            if(o_c.length==1){
+             localStorage.setItem('key_o','●●')
+            }
+            if(o_c.length==2){
+                localStorage.removeItem('key_o')  
+            }
+        }
+        $("#kekka").css("color","black"); 
+        
+    }
+    if(naiyou==4){
+        img_2.src = './img/karaburi.png';
+        if(s_c==null){
+        $("#kekka").html("空振り");
+        localStorage.setItem('key_s','●')
+        }
+        if(s_c.length==1){
+        $("#kekka").html("空振り");
+        localStorage.setItem('key_s','●●')
+        }
+        if(s_c.length==2){
+        $("#kekka").html("三振");
+        localStorage.removeItem('key_b')
+        localStorage.removeItem('key_s')
+        da = da +1;
+        if(o_c==null){
+            localStorage.setItem('key_o','●')
+            }
+            if(o_c.length==1){
+             localStorage.setItem('key_o','●●')
+            }
+            if(o_c.length==2){
+                localStorage.removeItem('key_o')  
+            }
+        }
+        $("#kekka").css("color","black"); 
+        
+
+    }
+    
+    
+    ritu_da_h = h / da ;
+    localStorage.setItem('da_lo',da)
+    localStorage.setItem('h_lo',h)
+    localStorage.setItem('hr_lo',hr)
+    localStorage.setItem('ritu',ritu_da_h.toFixed(3))
+
+});
+
+
+$("#minogasi").on("click",function(){
+    img_2.src = './img/minogasi.png';
+    img.src = './img/nageru.png';
+    $("#toukyu").html(cpu);
+    if(n==10 || n==11 || n== 12 || n==13){
+           
+        if(b_c== null){
+            $("#kekka").html("ボール");
+        localStorage.setItem('key_b','●')
+        }
+        if(b_c.length==1){
+            $("#kekka").html("ボール");
+        localStorage.setItem('key_b','●●')
+        }
+        if(b_c.length==2){
+            $("#kekka").html("ボール");
+        localStorage.setItem('key_b','●●●')
+        }
+        if(b_c.length==3){
+            $("#kekka").html("フォアボール");
+            localStorage.removeItem('key_b')
+            localStorage.removeItem('key_s')
+        }
+
+    }else{
+        if(s_c== null){
+            $("#kekka").html("ストライク");
+        localStorage.setItem('key_s','●')
+        }
+        if(s_c.length==1){
+            $("#kekka").html("ストライク");
+        localStorage.setItem('key_s','●●')
+        }
+        if(s_c.length==2){
+            $("#kekka").html("見逃し三振");
+            localStorage.removeItem('key_b')    
+            localStorage.removeItem('key_s')
+            da = da +1;
+            if(o_c==null){
+            localStorage.setItem('key_o','●')
+            }
+            if(o_c.length==1){
+             localStorage.setItem('key_o','●●')
+            }
+            if(o_c.length==2){
+                localStorage.removeItem('key_o')  
+            }
+
+
+
+        }
+        
+        
+    }
+
+    if(n==1){
+        $("#1").css("background","red"); 
+    }
+    if(n==2){
+        $("#2").css("background","red"); 
+    }
+    if(n==3){
+        $("#3").css("background","red"); 
+    }
+    if(n==4){
+        $("#4").css("background","red"); 
+    }
+    if(n==5){
+        $("#5").css("background","red"); 
+    }
+    if(n==6){
+        $("#6").css("background","red"); 
+    }
+    if(n==7){
+        $("#7").css("background","red"); 
+    }
+    if(n==8){
+        $("#8").css("background","red"); 
+    }
+    if(n==9){
+        $("#9").css("background","red"); 
+    }
+});
+
+
+
+$("#reset").on("click",function(){
+    localStorage.clear();
+});
+$("#reload_button").on("click",function(){
+    window.location.reload(true);
+});
+
+
+$("#ballcount").css("color","green");
+$("#ballcount").html(localStorage.getItem('key_b'));
+$("#strikecount").css("color","yellow");
+$("#strikecount").html(localStorage.getItem('key_s'));
+$("#outcount").css("color","red");
+$("#outcount").html(localStorage.getItem('key_o'));
+$("#runner").html(localStorage.getItem('rui'));
+$("#ritu").html(localStorage.getItem('ritu'));
+$("#honn").html(localStorage.getItem('hr_lo'));
+
+/*
+$("#pull").on("click",function(){
+    const r = Math.random()*5; //小数点0.000001~0.99999
+    const n = Math.ceil(r);    //繰り上げ0.01➡1
+    console.log(n);
+
+    if(n == 1){
+        $("#echo").html("大吉");           //文字を上書き
+        $("#echo").css("color","#ff0000"); //文字を赤
+        $("#echo").fadeOut(3000).fadeIn(3000); //文字を赤
+    }
+    if(n == 2){
+        $("#echo").html("中吉");
+        $("#echo").css("color","#00ff00"); //文字を緑
+    }
+    if(n == 3){
+        $("#echo").html("笑吉");
+        $("#echo").css("color","#0000ff"); //文字を青
+    }
+    if(n ==  4){
+        $("#echo").html("吉");
+        $("#echo").css("color","#000000"); //文字を黒
+    }
+    if(n == 5){
+        $("#echo").html("凶");
+        $("#echo").css("color","#000000"); //文字を黒
+    }
+});*/
+
+
+
+
+
+
+</script>
+</body>
+</html>

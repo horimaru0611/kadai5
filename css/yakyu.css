@@ -1,0 +1,247 @@
+.body{
+    position: relative;
+    margin: auto;
+    text-align:center;
+    font-size: 32px;
+    width: fit-content;
+    z-index: 2;
+}
+header{
+    margin:auto;
+    padding:0;
+    text-align:center;
+    font-size: 32px;
+    width: fit-content;
+    padding-top: 10px;
+    font-size: 30pt;
+}
+    
+
+
+
+
+.taisen{
+    display: flex;
+    height: 250px;
+    justify-content: center;
+    margin: 0;
+    td{
+        background-color: rgb(216, 236, 253);
+    }
+    td:hover{
+         background: #0066CC;
+            
+    }
+
+    .pitcher{
+        margin-right: 100px;
+    }
+    .batter{
+        margin-left: 100px;
+        table{
+            display: inline-block;
+            margin: 0;
+            text-align:center;
+        }
+    }
+
+}
+img{
+    width: 200px;
+}
+
+
+.swing{
+    
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    
+    
+    
+    p{
+        
+        border: 1px solid black;
+        padding: 3px;
+        background-color: rgb(216, 236, 253);
+        
+
+    }
+    
+    p:hover{
+        background: #0066CC;
+}
+}
+
+.koumoku{
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    margin: auto;
+    text-align:center;
+    font-size: 15pt;
+    
+    .cpu_tokyu{
+        margin-right: 100px;
+        width: 400px;
+        background-color: rgb(216, 236, 253);
+    }
+    .jibun_nerai{
+        margin-left: 100px;
+        width: 400px;
+        background-color: rgb(216, 236, 253);
+    }
+}
+.haikei{
+    width: 100%;
+    position: absolute;
+    z-index: 1;
+}
+.label{
+    
+    display: flex;
+    font-size: larger;
+    justify-content: center;
+    margin: 0;
+}
+.hantei{
+    margin-right: 100px;
+    width: 500px;
+ 
+    background-color: aliceblue;
+}
+.run{
+    margin-left: 100px;
+    width: 500px;
+    background-color: aliceblue;
+}
+
+
+img{
+     mix-blend-mode: multiply;
+}
+
+.kousin{
+    height: 80px;
+    justify-content: center;
+    font-size: 15pt;
+    display: flex;
+    
+    .next{
+        position: relative;
+        top: 15%;
+        border: 1px solid gray;
+        padding-right: 20px;
+        padding-left: 20px;
+        background-color: aliceblue;
+        margin-right: 200px;
+
+
+        
+        font-size: larger;
+    }
+    .next:hover{
+        background: rgba(255, 220, 107, 0.993);
+
+    }
+}
+
+.hantei_1{
+    display: none;
+    position: absolute;
+    font-size: 150px;
+    color: yellow;
+    top: 40%;
+    left: 12%;
+}
+
+.daritu{
+    display: flex;
+    text-align: right;
+    justify-content: right;
+    position: relative;
+    margin-bottom: 100px;
+    margin-right: 100px;
+    table{
+        background-color:white;
+    }
+   
+    .ritu{
+        width: 40px;
+    }
+
+    td{
+        width: 60px;
+    }
+}
+.re{
+    border: 1px solid black;
+    padding: 0;
+    height: auto;
+    
+}
+
+    .re:hover{
+        background: #0066CC;
+    }
+    
+.count{
+    margin-right: 50px;
+    background-color: black;
+    height: 40px;
+    display: inline-block;
+    padding-bottom: 50px;
+    
+    width: 100px;
+    .BSObox{
+        display: flex;
+        
+        padding: 0;
+        
+        .ball{
+
+            color: white;
+         display: inline-block;
+
+            div{
+                color: green;
+            }
+            
+        }
+        .strike{
+            color: white;
+            display: inline-block;
+            div{
+                color: yellow;
+            }
+            
+        }
+        .out{
+            color: white;
+            display: inline-block;
+            div{
+                color: red;
+            }
+            
+        }
+    }
+}
+.tokuten{
+    margin-right: 50px;
+    table{
+        color: white;
+
+        background-color:black;
+        td{
+            width: 30px;
+           
+        }
+
+        .inn{
+            width: 40px;
+        }
+        .toku{
+            width: 80px;
+        }
+    }
+}
